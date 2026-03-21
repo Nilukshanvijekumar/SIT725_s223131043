@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-node_modules
-=======
 # Dependencies
 node_modules/
 
@@ -16,4 +13,3 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 .vscode/
->>>>>>> 0c367e06b952d3779c86f2c0b1481e72ac90a388
