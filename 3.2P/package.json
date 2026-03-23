@@ -1,0 +1,14 @@
+{
+  "name": "sit725-tech-topics-hub",
+  "version": "1.0.0",
+  "description": "SIT725 3.2P Tech Topics Hub project using Express and Materialize",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Nilukshan Vijekumar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

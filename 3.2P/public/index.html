@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech Topics Hub</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link rel="stylesheet" href="CSS/style.css" />
+</head>
+<body>
+  <nav>
+  <div class="nav-wrapper navbar-size">
+    
+    <!-- LEFT: LOGO -->
+    <a href="#" class="brand-logo left">
+      <img src="images/logo.png" alt="Logo" />
+    </a>
+
+    <!-- RIGHT: GITHUB LINK -->
+    <ul class="right">
+      <li>
+        <a href="https://www.linkedin.com/in/nilukshan-vijekumar-blank" rel="noopener noreferrer">
+          Linkedin
+        </a>
+      </li>
+    </ul>
+
+  </div>
+</nav>
+
+  <main class="main-body">
+    <div class="container">
+      <div class="row">
+        <div class="col s12 center-align">
+          <h1>Welcome to Tech Topics Hub</h1>
+          <p class="flow-text intro-text">
+            This demo web application showcases different technology topics using Materialize
+            components, dynamic cards, and a modal form.
+          </p>
+        </div>
+
+        <div class="col s12 center-align">
+          <img
+            src="images/BG.jpg"
+            alt="Technology Hero"
+            class="materialboxed materialboxed-image"
+          />
+        </div>
+
+        <div class="col s12 center-align">
+          <a class="waves-effect waves-light btn modal-trigger click-me-button" href="#modal1">
+            <i class="material-icons left">auto_fix_high</i>
+            Explore Topics
+          </a>
+        </div>
+      </div>
+
+      <div id="card-section" class="row"></div>
+    </div>
+  </main>
+
+  <div id="modal1" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Join the Tech Topics Hub</h4>
+
+      <form id="topicForm" class="col s12">
+        <div class="row">
+          <div class="input-field col s12 m6">
+            <input id="first_name" type="text" class="validate" required />
+            <label for="first_name">First Name</label>
+          </div>
+
+          <div class="input-field col s12 m6">
+            <input id="last_name" type="text" class="validate" required />
+            <label for="last_name">Last Name</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="password" type="password" class="validate" required />
+            <label for="password">Password</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="email" type="email" class="validate" required />
+            <label for="email">Email</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12 center-align">
+            <button id="formSubmit" class="waves-effect waves-light btn submit-button" type="submit">
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect btn-flat">Close</a>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="JS/script.js"></script>
+</body>
+</html>
