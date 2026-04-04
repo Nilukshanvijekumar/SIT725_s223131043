@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Books Catalog</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    button { padding: 10px 16px; cursor: pointer; margin-bottom: 20px; }
+    #book-list { border: 1px solid #999; width: 400px; min-height: 120px; }
+    .book-item { padding: 10px; border-bottom: 1px solid #ddd; cursor: pointer; }
+    .book-item:hover { background: #f2f2f2; }
+    #book-details { margin-top: 20px; border: 1px solid #999; width: 550px; min-height: 140px; padding: 15px; }
+  </style>
+</head>
+<body>
+  <h1>Books Catalogue developed by s223131043</h1>
+
+  <button id="fetchBooksBtn">Get all books</button>
+
+  <div id="book-list"></div>
+
+  <div id="book-details">
+    <p>Click a book to see details here.</p>
+  </div>
+
+  <script>
+    const btn = document.getElementById('fetchBooksBtn');
+    const list = document.getElementById('book-list');
+    const details = document.getElementById('book-details');
+
+    function renderList(items) {
+      list.innerHTML = '';
+      details.innerHTML = '<p>Click a book to see details here.</p>';
+
+      if (!Array.isArray(items) || items.length === 0) {
+        list.textContent = 'No books found.';
+        return;
+      }
+
+      for (const it of items) {
+        const div = document.createElement('div');
+        div.className = 'book-item';
+        div.textContent = `${it.title} ${it.price} AUD`;
+
+        div.addEventListener('click', async () => {
+          const res = await fetch(`/api/books/${it._id}`);
+          const body = await res.json();
+          const book = body.data;
+
+          details.innerHTML = `
+            <p><strong>Title:</strong> ${book.title}</p>
+            <p><strong>Author:</strong> ${book.author}</p>
+            <p><strong>Year:</strong> ${book.year}</p>
+            <p><strong>Genre:</strong> ${book.genre}</p>
+            <p><strong>Summary:</strong> ${book.summary}</p>
+            <p><strong>Price (AUD):</strong> ${book.price}</p>
+          `;
+        });
+
+        list.appendChild(div);
+      }
+    }
+
+    btn.addEventListener('click', async () => {
+      list.textContent = 'Loading...';
+      try {
+        const res = await fetch('/api/books');
+        const body = await res.json();
+        renderList(body.data);
+      } catch (err) {
+        list.textContent = 'Error fetching books.';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
