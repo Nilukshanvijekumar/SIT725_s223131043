@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Books Catalog</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    #booksList p {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 6px;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Books Catalog</h1>
+  <div id="booksList">Loading books...</div>
+
+  <script>
+    const out = document.getElementById('booksList');
+
+    function renderBooks(items) {
+      out.innerHTML = '';
+
+      if (!Array.isArray(items) || items.length === 0) {
+        out.textContent = 'No books found.';
+        return;
+      }
+
+      for (const book of items) {
+        const p = document.createElement('p');
+        p.textContent = `${book.title} by ${book.author}`;
+        out.appendChild(p);
+      }
+    }
+
+    async function loadBooks() {
+      try {
+        const res = await fetch('/api/books');
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const body = await res.json();
+        renderBooks(body.data);
+      } catch (err) {
+        console.error('Error fetching books:', err);
+        out.textContent = 'Error fetching books.';
+      }
+    }
+
+    loadBooks();
+  </script>
+</body>
+</html>
