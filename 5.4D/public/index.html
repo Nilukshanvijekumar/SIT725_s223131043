@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Books Catalogue</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    #book-list {
+      border: 1px solid #ccc;
+      max-width: 500px;
+    }
+
+    .book-item {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    .book-item:hover {
+      background-color: #f0f0f0;
+    }
+
+    #book-details {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      max-width: 600px;
+      min-height: 120px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Books Catalogue developed by s223131043</h1>
+
+  <button id="fetchBooksBtn">Get all books</button>
+
+  <div id="book-list"></div>
+
+  <div id="book-details">
+    <p>Click a book to see details here.</p>
+  </div>
+
+  <script>
+    const btn = document.getElementById('fetchBooksBtn');
+    const list = document.getElementById('book-list');
+    const details = document.getElementById('book-details');
+
+    async function fetchBooks() {
+      try {
+        const response = await fetch('/api/books');
+        const result = await response.json();
+
+        if (!response.ok) {
+          list.innerHTML = '<p>Failed to load books.</p>';
+          return;
+        }
+
+        list.innerHTML = '';
+
+        result.data.forEach((book) => {
+          const item = document.createElement('div');
+          item.className = 'book-item';
+          item.textContent = `${book.title} ${book.price} AUD`;
+
+          item.addEventListener('click', () => {
+            fetchBookDetails(book.id);
+          });
+
+          list.appendChild(item);
+        });
+
+      } catch (error) {
+        console.error(error);
+        list.innerHTML = '<p>Error loading books.</p>';
+      }
+    }
+
+    async function fetchBookDetails(id) {
+      try {
+        const response = await fetch(`/api/books/${id}`);
+        const result = await response.json();
+
+        if (!response.ok) {
+          details.innerHTML = '<p>Book details not found.</p>';
+          return;
+        }
+
+        const book = result.data;
+
+        details.innerHTML = `
+          <h3>${book.title}</h3>
+          <p><strong>ID:</strong> ${book.id}</p>
+          <p><strong>Author:</strong> ${book.author}</p>
+          <p><strong>Year:</strong> ${book.year}</p>
+          <p><strong>Genre:</strong> ${book.genre}</p>
+          <p><strong>Summary:</strong> ${book.summary}</p>
+          <p><strong>Price:</strong> ${book.price} AUD</p>
+        `;
+
+      } catch (error) {
+        console.error(error);
+        details.innerHTML = '<p>Error loading book details.</p>';
+      }
+    }
+
+    btn.addEventListener('click', fetchBooks);
+  </script>
+
+</body>
+</html>
