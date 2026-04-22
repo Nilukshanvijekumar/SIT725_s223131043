@@ -1,29 +1,9 @@
-/**
- * SIT725 – 5.4D Validation Tests (MANDATORY TEMPLATE)
- *
- * HOW TO RUN: (Node.js 18+ is required)
- *   1. Start MongoDB
- *   2. Start your server (npm start)
- *   3. node validation-tests.js
- *
- * DO NOT MODIFY:
- *   - Output format (TEST|, SUMMARY|, COVERAGE|)
- *   - test() function signature
- *   - Exit behaviour
- *   - coverageTracker object
- *   - Logging structure
- *
- * YOU MUST:
- *   - Modify makeValidBook() to satisfy your schema rules
- *   - Add sufficient tests to meet coverage requirements
- */
+
 
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 const API_BASE = "/api/books";
 
-// =============================
-// INTERNAL STATE (DO NOT MODIFY)
-// =============================
+
 
 const results = [];
 
@@ -40,9 +20,7 @@ const coverageTracker = {
   IMMUTABLE: 0,
 };
 
-// =============================
-// OUTPUTS FORMAT (DO NOT MODIFY)
-// =============================
+
 
 function logHeader(uniqueId) {
   console.log("SIT725_VALIDATION_TESTS");
@@ -80,9 +58,7 @@ function logCoverage() {
   );
 }
 
-// =============================
-// HTTP HELPER
-// =============================
+
 
 async function http(method, path, body) {
   const res = await fetch(`${BASE_URL}${path}`, {
@@ -95,12 +71,9 @@ async function http(method, path, body) {
   return { status: res.status, text };
 }
 
-// =============================
-// TEST REGISTRATION FUNCTION
-// =============================
+
 
 async function test({ id, name, method, path, expected, body, tags }) {
-
   const { status } = await http(method, path, body);
   const pass = status === expected;
 
@@ -117,9 +90,7 @@ async function test({ id, name, method, path, expected, body, tags }) {
   });
 }
 
-// =============================
-// STUDENT MUST MODIFY THESE
-// =============================
+
 
 function makeValidBook(id) {
   return {
@@ -144,12 +115,9 @@ function makeValidUpdate() {
   };
 }
 
-// =============================
-// REQUIRED BASE TESTS (DO NOT REMOVE)
-// =============================
+
 
 async function run() {
-
   const uniqueId = `b${Date.now()}`;
   logHeader(uniqueId);
 
@@ -337,8 +305,6 @@ async function run() {
     tags: []
   });
 
-
-
   await test({
     id: "T18",
     name: "ID too short on CREATE",
@@ -470,6 +436,201 @@ async function run() {
     body: { ...makeValidUpdate(), title: "T".repeat(101) },
     tags: ["UPDATE_FAIL", "LENGTH"]
   });
+
+  // Additional tests based on model validations
+
+  await test({
+    id: "T30",
+    name: "Missing id on CREATE",
+    method: "POST",
+    path: createPath,
+    expected: 400,
+    body: (() => {
+      const book = makeValidBook(`b${Date.now() + 15}`);
+      delete book.id;
+      return book;
+    })(),
+    tags: ["CREATE_FAIL", "REQUIRED"]
+  });
+
+  await test({
+    id: "T31",
+    name: "Missing author on CREATE",
+    method: "POST",
+    path: createPath,
+    expected: 400,
+    body: (() => {
+      const book = makeValidBook(`b${Date.now() + 16}`);
+      delete book.author;
+      return book;
+    })(),
+    tags: ["CREATE_FAIL", "REQUIRED"]
+  });
+
+  await test({
+    id: "T32",
+    name: "Missing year on CREATE",
+    method: "POST",
+    path: createPath,
+    expected: 400,
+    body: (() => {
+      const book = makeValidBook(`b${Date.now() + 17}`);
+      delete book.year;
+      return book;
+    })(),
+    tags: ["CREATE_FAIL", "REQUIRED"]
+  });
+
+  await test({
+    id: "T33",
+    name: "Missing genre on CREATE",
+    method: "POST",
+    path: createPath,
+    expected: 400,
+    body: (() => {
+      const book = makeValidBook(`b${Date.now() + 18}`);
+      delete book.genre;
+      return book;
+    })(),
+    tags: ["CREATE_FAIL", "REQUIRED"]
+  });
+
+  await test({
+    id: "T34",
+    name: "Missing price on CREATE",
+    method: "POST",
+    path: createPath,
+    expected: 400,
+    body: (() => {
+      const book = makeValidBook(`b${Date.now() + 19}`);
+      delete book.price;
+      return book;
+    })(),
+    tags: ["CREATE_FAIL", "REQUIRED"]
+  });
+
+  await test({
+    id: "T35",
+    name: "Missing title on UPDATE",
+    method: "PUT",
+    path: updatePath(uniqueId),
+    expected: 400,
+    body: (() => {
+      const update = makeValidUpdate();
+      delete update.title;
+      return update;
+    })(),
+    tags: ["UPDATE_FAIL", "REQUIRED"]
+  });
+
+  await test({
+    id: "T36",
+    name: "Missing year on UPDATE",
+    method: "PUT",
+    path: updatePath(uniqueId),
+    expected: 400,
+    body: (() => {
+      const update = makeValidUpdate();
+      delete update.year;
+      return update;
+    })(),
+    tags: ["UPDATE_FAIL", "REQUIRED"]
+  });
+
+  await test({
+    id: "T37",
+    name: "Missing summary on UPDATE",
+    method: "PUT",
+    path: updatePath(uniqueId),
+    expected: 400,
+    body: (() => {
+      const update = makeValidUpdate();
+      delete update.summary;
+      return update;
+    })(),
+    tags: ["UPDATE_FAIL", "REQUIRED"]
+  });
+
+  await test({
+    id: "T38",
+    name: "Title too long on CREATE",
+    method: "POST",
+    path: createPath,
+    expected: 400,
+    body: { ...makeValidBook(`b${Date.now() + 20}`), title: "T".repeat(101) },
+    tags: ["CREATE_FAIL", "LENGTH"]
+  });
+
+  await test({
+    id: "T39",
+    name: "Summary too long on UPDATE",
+    method: "PUT",
+    path: updatePath(uniqueId),
+    expected: 400,
+    body: { ...makeValidUpdate(), summary: "S".repeat(501) },
+    tags: ["UPDATE_FAIL", "LENGTH"]
+  });
+
+  await test({
+    id: "T40",
+    name: "Price negative on CREATE",
+    method: "POST",
+    path: createPath,
+    expected: 400,
+    body: { ...makeValidBook(`b${Date.now() + 21}`), price: "-5.00" },
+    tags: ["CREATE_FAIL", "BOUNDARY"]
+  });
+
+  await test({
+    id: "T41",
+    name: "Year below minimum on UPDATE",
+    method: "PUT",
+    path: updatePath(uniqueId),
+    expected: 400,
+    body: { ...makeValidUpdate(), year: 999 },
+    tags: ["UPDATE_FAIL", "BOUNDARY"]
+  });
+
+  await test({
+    id: "T42",
+    name: "Genre too short on UPDATE",
+    method: "PUT",
+    path: updatePath(uniqueId),
+    expected: 400,
+    body: { ...makeValidUpdate(), genre: "AB" },
+    tags: ["UPDATE_FAIL", "LENGTH"]
+  });
+
+  await test({
+    id: "T43",
+    name: "Genre too long on UPDATE",
+    method: "PUT",
+    path: updatePath(uniqueId),
+    expected: 400,
+    body: { ...makeValidUpdate(), genre: "G".repeat(31) },
+    tags: ["UPDATE_FAIL", "LENGTH"]
+  });
+
+  await test({
+    id: "T44",
+    name: "Price above maximum on UPDATE",
+    method: "PUT",
+    path: updatePath(uniqueId),
+    expected: 400,
+    body: { ...makeValidUpdate(), price: "10000.00" },
+    tags: ["UPDATE_FAIL", "BOUNDARY"]
+  });
+
+  await test({
+    id: "T45",
+    name: "Valid update",
+    method: "PUT",
+    path: updatePath(uniqueId),
+    expected: 200,
+    body: makeValidUpdate(),
+    tags: []
+  });
+
   const pass = logSummary();
   logCoverage();
 
