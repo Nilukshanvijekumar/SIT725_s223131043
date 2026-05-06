@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <div>
+          <h1>SIT725 7.2P</h1>
+          <p class="sub">Express + Socket.IO real-time rooms chat</p>
+        </div>
+        <div class="status">
+          <div class="pill" id="connPill">Disconnected</div>
+          <div class="pill pill-muted" id="roomPill">Room: —</div>
+          <div class="pill pill-muted" id="countPill">Online: —</div>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>Join a room</h2>
+        <form id="joinForm" class="row">
+          <label class="field">
+            <span>Your name</span>
+            <input id="nameInput" maxlength="24" placeholder="e.g. Nilukshan" required />
+          </label>
+          <label class="field">
+            <span>Room</span>
+            <input id="roomInput" maxlength="32" placeholder="e.g. SIT725" value="SIT725" required />
+          </label>
+          <button class="btn" type="submit">Join</button>
+        </form>
+        <p class="hint">Open this page in two browser tabs to see real-time updates.</p>
+      </section>
+
+      <section class="card">
+        <div class="chatHeader">
+          <h2>Chat</h2>
+          <div class="typing" id="typingIndicator"></div>
+        </div>
+        <ol id="messages" class="messages"></ol>
+        <form id="msgForm" class="row" autocomplete="off">
+          <input id="msgInput" placeholder="Type a message…" maxlength="400" disabled />
+          <button class="btn" type="submit" disabled id="sendBtn">Send</button>
+        </form>
+      </section>
+    </main>
+
+    <!-- Load socket.io BEFORE app.js -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
