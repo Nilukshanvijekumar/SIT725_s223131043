@@ -33,7 +33,8 @@ services:
       - ./frontend/.env
     environment:
       - PORT=3300
-      - API_BASE_URL=http://localhost:5000
+      - BACKEND_INTERNAL_URL=http://backend:5000
+      - PUBLIC_API_BASE_URL=
     depends_on:
       - backend
     ports:

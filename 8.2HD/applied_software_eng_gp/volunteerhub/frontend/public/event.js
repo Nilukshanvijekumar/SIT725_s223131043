@@ -1,4 +1,7 @@
-const API_BASE_URL = window.__CONFIG__?.API_BASE_URL || "http://localhost:5000";
+const API_BASE_URL =
+  typeof window.__CONFIG__?.API_BASE_URL === "string"
+    ? window.__CONFIG__.API_BASE_URL
+    : "http://localhost:5000";
 const authToken = localStorage.getItem("vh_token") || "";
 const authUser = JSON.parse(localStorage.getItem("vh_user") || "null");
 const roleAliases = {
